@@ -1,0 +1,15 @@
+ext {
+    versionCode = 1
+    libVersionName = '1.0.7'
+
+    // Bintray setting info
+    repositoryName = 'logger'
+    packageName = 'kr.twothumb.lib'
+
+    websiteUrl = 'https://github.com/irus2315/Logger'
+    gitHubRepoUrl = 'https://github.com/irus2315/Logger.git'
+
+    githubRepo = 'irus2315/Logger'
+    githubReleaseNotesFile = 'CHANGELOG.md'
+}
+

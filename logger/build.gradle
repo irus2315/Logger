@@ -1,0 +1,112 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+
+group = rootProject.ext.packageName
+version = rootProject.ext.libVersionName
+
+bintray {
+    user=System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+//    key='123'
+    configurations=['archives']
+    publish true
+
+    pkg {
+//        repo=rootProject.ext.repositoryName
+        repo='maven'
+        name=rootProject.ext.packageName
+        userOrg = System.getenv('BINTRAY_USER')
+        licenses=['Apache-2.0']
+        vcsUrl=rootProject.ext.gitHubRepoUrl
+
+        version {
+            name = rootProject.ext.libVersionName // The name of your library project
+            released  = new Date() // Optional - Date of the version release. 2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
+        }
+    }
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.0"
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.libVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name rootProject.ext.repositoryName
+            description rootProject.ext.repositoryName
+            url rootProject.ext.websiteUrl
+            inceptionYear '2020'
+
+            // Gradle dependencies
+            packaging 'aar'
+            groupId rootProject.ext.packageName
+            artifactId rootProject.ext.repositoryName
+            version rootProject.ext.libVersionName
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+        }
+    }
+}
+
+//JCenter publish
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+task findConventions {
+    doLast {
+        println project.getConvention()
+    }
+}
