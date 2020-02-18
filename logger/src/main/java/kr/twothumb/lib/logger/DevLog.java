@@ -10,6 +10,7 @@ public class DevLog {
     private String TAG = "";
 
     private volatile static DevLog devLog;
+    public static boolean enable = true;
     public static DevLog getInstance(){
         if(devLog == null){
             synchronized(DevLog.class){
@@ -25,23 +26,30 @@ public class DevLog {
         getInstance().TAG = TAG;
     }
 
+    public void init(String TAG, boolean enable){
+        getInstance();
+        DevLog.enable = enable;
+        getInstance().TAG = TAG;
+    }
+
+
     public static void v(Object... messages) {
-        if (BuildConfig.DEBUG)
+        if (enable)
             Log.v(getInstance().TAG, buildMessage(objectToString(messages)));
     }
 
     public static void i(Object... messages) {
-        if (BuildConfig.DEBUG)
+        if (enable)
             Log.i(getInstance().TAG, buildMessage(objectToString(messages)));
     }
 
     public static void d(Object... messages) {
-        if (BuildConfig.DEBUG)
+        if (enable)
             Log.d(getInstance().TAG, buildMessage(objectToString(messages)));
     }
 
     public static void e(Object... messages) {
-        if (BuildConfig.DEBUG)
+        if (enable)
             Log.e(getInstance().TAG, buildMessage(objectToString(messages)));
     }
 
