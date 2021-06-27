@@ -1,33 +1,9 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 
-group = rootProject.ext.packageName
+group = "com.github.irus2315"
 version = rootProject.ext.libVersionName
-
-bintray {
-    user=System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-//    key='123'
-    configurations=['archives']
-    publish true
-
-    pkg {
-//        repo=rootProject.ext.repositoryName
-        repo='maven'
-        name=rootProject.ext.packageName
-        userOrg = System.getenv('BINTRAY_USER')
-        licenses=['Apache-2.0']
-        vcsUrl=rootProject.ext.gitHubRepoUrl
-
-        version {
-            name = rootProject.ext.libVersionName // The name of your library project
-            released  = new Date() // Optional - Date of the version release. 2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
-        }
-    }
-}
 
 android {
     compileSdkVersion 29
@@ -54,7 +30,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation 'com.github.jitpack:android-example:1.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
