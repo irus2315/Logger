@@ -11,9 +11,11 @@ public class DevLog {
 
     private volatile static DevLog devLog;
     public static boolean enable = true;
-    public static DevLog getInstance(){
-        if(devLog == null){
-            synchronized(DevLog.class){
+    private static boolean setMethod = false;
+
+    public static DevLog getInstance() {
+        if (devLog == null) {
+            synchronized (DevLog.class) {
                 if (devLog == null) {
                     devLog = new DevLog();
                 }
@@ -22,16 +24,20 @@ public class DevLog {
         return devLog;
     }
 
-    public void init(String TAG){
+    public void init(String TAG) {
         getInstance().TAG = TAG;
     }
 
-    public void init(String TAG, boolean enable){
+
+    public void init(String TAG, boolean enable) {
         getInstance();
         DevLog.enable = enable;
         getInstance().TAG = TAG;
     }
 
+    public void setMethod(boolean setMethod) {
+        this.setMethod = setMethod;
+    }
 
     public static void v(Object... messages) {
         if (enable)
@@ -57,12 +63,15 @@ public class DevLog {
 
         StackTraceElement ste = Thread.currentThread().getStackTrace()[4];
 
-        return "[" +
-                ste.getFileName().replace(".java", "") +
-                "::" +
-                ste.getMethodName() +
-                "]" +
-                message;
+        if (setMethod)
+            return "[" +
+                    ste.getFileName().replace(".java", "") +
+                    "::" +
+                    ste.getMethodName() +
+                    "]" +
+                    message;
+        else
+            return message;
 
     }
 
